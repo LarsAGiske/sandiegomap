@@ -6581,16 +6581,16 @@
                     handleTileError(error, tile);
                 });
 
+                // Initialize all categories as active first
+                Object.keys(locationData.categories).forEach(cat => {
+                    activeFilters.add(cat);
+                });
+
                 initializeFilters();
                 renderMarkers();
                 initializeDayPlans();
                 updateStats();
                 setupEventListeners();
-
-                Object.keys(locationData.categories).forEach(cat => {
-                    activeFilters.add(cat);
-                    document.getElementById(`filter-${cat}`).checked = true;
-                });
 
                 showLoading(false);
 
@@ -6625,6 +6625,12 @@
                     <span class="filter-label">${category.name}</span>
                     <span class="filter-count">${count}</span>
                 `;
+
+                // Set initial state based on activeFilters
+                if (activeFilters.has(key)) {
+                    filterItem.classList.add('active');
+                    filterItem.querySelector('input').checked = true;
+                }
 
                 filterItem.addEventListener('click', (e) => {
                     if (e.target.type !== 'checkbox') {
